@@ -10,3 +10,14 @@ append_symbol <- function(data_path, modified_path) {
     write.csv(x = temp, file = paste(modified_path, stockq[i], sep = ''), col.names = TRUE, row.names = FALSE)
   }
 }
+
+combine_data <- function(data_path) {
+  stockq = list.files(pattern = "*.csv", path = data_path)
+  stockq = paste(data_path, stockq, sep = '')
+  
+  sqlist = lapply(stockq, fread)
+  squotes = rbindlist(sqlist)
+  setkey(squotes, timestamp, symbol)
+  
+  return(squotes)
+}
